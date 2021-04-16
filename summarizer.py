@@ -1,15 +1,25 @@
+from requests.exceptions import HTTPError
+
 from nltk.parse.corenlp import CoreNLPServer
+from nltk.parse.corenlp import CoreNLPServerError
 from nltk.parse.corenlp import CoreNLPDependencyParser
 
 
 class Summarizer:
     def __init__(self, jar_path, models_jar_path):
         self.server = CoreNLPServer(path_to_jar=jar_path, path_to_models_jar=models_jar_path)
-        self.server.start()
+        try:
+            self.server.start()
+        except CoreNLPServerError:
+            pass
         self.parser = CoreNLPDependencyParser()
 
     def summarize(self, text):
-        parse = next(self.parser.raw_parse(text))
+        try:
+            parse = next(self.parser.raw_parse(text))
+        except HTTPError:
+            return []
+
         summary = list()
         for governor, dep, dependent in parse.triples():
             if dep == 'nsubj':
