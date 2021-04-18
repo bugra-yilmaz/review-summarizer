@@ -23,7 +23,7 @@ def extract_reason(summaries, n_features=3):
     top_features = sorted(features.keys(), key=lambda x: len(features[x]), reverse=True)[:n_features]
     top_opinions = [Counter(features[feature]).most_common()[0][0] for feature in top_features]
     reason = [' '.join([opinion, feature]) for opinion, feature in zip(top_opinions, top_features)]
-    return reason
+    return ','.join(reason)
 
 
 if __name__ == '__main__':
@@ -92,5 +92,5 @@ if __name__ == '__main__':
         for restaurant_id, data in restaurants.items():
             restaurant_object = {'business_id': restaurant_id, 'name': data['name'],
                                  'rating': data['rating'], 'reason': data['reason'],
-                                 'categories': data['categories']}
+                                 'categories': data['categories'].replace(' ', '')}
             f.write(f'{json.dumps(restaurant_object)}\n')
