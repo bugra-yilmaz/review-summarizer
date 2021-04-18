@@ -93,4 +93,4 @@ if __name__ == '__main__':
             restaurant_object = {'business_id': restaurant_id, 'name': data['name'],
                                  'rating': data['rating'], 'reason': data['reason'],
                                  'categories': data['categories']}
-            f.write(f'{restaurant_object}\n')
+            f.write(f'{json.dumps(restaurant_object)}\n')
