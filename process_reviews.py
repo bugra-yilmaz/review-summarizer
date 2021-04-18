@@ -39,7 +39,7 @@ if __name__ == '__main__':
     argument_parser.add_argument('-n', '--n-restaurants', help='Number of restaurants to process',
                                  type=int, default=100, dest='n', metavar='')
     argument_parser.add_argument('-o', '--out', help='Filepath for saving the output file',
-                                 default='restaurants.json', dest='o', metavar='')
+                                 default='output/restaurants.json', dest='o', metavar='')
     args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)7s: %(message)s',
