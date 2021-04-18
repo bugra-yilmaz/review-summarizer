@@ -38,6 +38,8 @@ if __name__ == '__main__':
                                  dest='smj', metavar='')
     argument_parser.add_argument('-n', '--n-restaurants', help='Number of restaurants to process',
                                  type=int, default=100, dest='n', metavar='')
+    argument_parser.add_argument('-o', '--out', help='Filepath for saving the output file',
+                                 default='restaurants.json', dest='o', metavar='')
     args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)7s: %(message)s',
@@ -54,7 +56,7 @@ if __name__ == '__main__':
                                                         'categories': business['categories'], 'reviews': set()}
                 if len(restaurants) == args.n:
                     break
-    logging.info(f'{len(restaurants)} restaurants are collected - {round(time.time() - t, 2)} seconds.')
+    logging.info(f'Collected {len(restaurants)} restaurants - {round(time.time() - t, 2)} seconds.')
 
     logging.info('Collecting and summarizing reviews data...')
     t = time.time()
@@ -68,7 +70,6 @@ if __name__ == '__main__':
                 review_id, restaurant_id = review['review_id'], review['business_id']
 
                 if rating > restaurants[restaurant_id]['rating']:
-                    print('Skip review', rating, restaurants[restaurant_id]['rating'])
                     continue
 
                 text = clean_review(review['text'])
@@ -77,7 +78,7 @@ if __name__ == '__main__':
                 restaurants[restaurant_id]['reviews'].add(review_id)
 
     summarizer.stop()
-    logging.info(f'{len(reviews)} reviews are collected and summarized - {round(time.time() - t, 2)} seconds.')
+    logging.info(f'Collected and summarized {len(reviews)} reviews - {round(time.time() - t, 2)} seconds.')
 
     for restaurant, data in restaurants.items():
         summaries = list()
@@ -87,10 +88,9 @@ if __name__ == '__main__':
         reason = extract_reason(summaries)
         restaurants[restaurant]['reason'] = reason
 
-    with open('restaurants.txt', 'w') as f:
-        for restaurant, data in restaurants.items():
-            f.write(f'{restaurant} - {data}\n')
-
-    with open('reviews.txt', 'w') as f:
-        for review, data in reviews.items():
-            f.write(f'{review} - {data}\n')
+    with open(args.o, 'w') as f:
+        for restaurant_id, data in restaurants.items():
+            restaurant_object = {'business_id': restaurant_id, 'name': data['name'],
+                                 'rating': data['rating'], 'reason': data['reason'],
+                                 'categories': data['categories']}
+            f.write(f'{restaurant_object}\n')
