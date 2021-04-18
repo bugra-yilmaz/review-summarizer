@@ -27,10 +27,10 @@ class Summarizer:
         summary = list()
         for governor, dep, dependent in parse.triples():
             if dep == 'nsubj':
-                if governor[1] == 'JJ' and dependent[1] == 'NN':
+                if governor[1] == 'JJ' and dependent[1] in {'NN', 'NNS'}:
                     summary.append((governor[0].lower(), dependent[0].lower()))
             elif dep == 'amod':
-                if dependent[1] == 'JJ' and governor[1] == 'NN':
+                if dependent[1] == 'JJ' and governor[1] in {'NN', 'NNS'}:
                     summary.append((dependent[0].lower(), governor[0].lower()))
         return summary
 
