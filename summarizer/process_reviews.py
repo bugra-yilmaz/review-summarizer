@@ -1,4 +1,5 @@
 import re
+import os
 import time
 import json
 import logging
@@ -29,17 +30,17 @@ def extract_reason(summaries, n_features=3):
 if __name__ == '__main__':
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument('-ybd', '--yelp-bus-data', help='Filepath to Yelp business dataset',
-                                 dest='ybd', metavar='')
+                                 dest='ybd', default='data/sample_business.json', metavar='')
     argument_parser.add_argument('-yrd', '--yelp-rew-data', help='Filepath to Yelp review dataset',
-                                 dest='yrd', metavar='')
+                                 dest='yrd', default='data/sample_review.json', metavar='')
     argument_parser.add_argument('-sj', '--stan-jar', help='Filepath to Stanford CoreNLP .jar file',
-                                 dest='sj', metavar='')
+                                 dest='sj', default='data/stanford-corenlp-4.2.0.jar', metavar='')
     argument_parser.add_argument('-smj', '--stan-models-jar', help='Filepath to Stanford models .jar file',
-                                 dest='smj', metavar='')
+                                 dest='smj', default='data/stanford-corenlp-4.2.0-models.jar', metavar='')
     argument_parser.add_argument('-n', '--n-restaurants', help='Number of restaurants to process',
                                  type=int, default=100, dest='n', metavar='')
-    argument_parser.add_argument('-o', '--out', help='Filepath for saving the output file',
-                                 default='output/restaurants.json', dest='o', metavar='')
+    argument_parser.add_argument('-o', '--out', help='Filepath for saving the output file (in output directory)',
+                                 default='restaurants.json', dest='o', metavar='')
     args = argument_parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)7s: %(message)s',
@@ -88,7 +89,9 @@ if __name__ == '__main__':
         reason = extract_reason(summaries)
         restaurants[restaurant]['reason'] = reason
 
-    with open(args.o, 'w') as f:
+    if not os.path.exists('output'):
+        os.mkdir('output')
+    with open(os.path.join('output', args.o), 'w') as f:
         for restaurant_id, data in restaurants.items():
             restaurant_object = {'business_id': restaurant_id, 'name': data['name'],
                                  'rating': data['rating'], 'reason': data['reason'],
