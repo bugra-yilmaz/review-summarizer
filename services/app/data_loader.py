@@ -8,8 +8,11 @@ import json
 from common import *
 
 
-# Push the initial data into the database
 def load_data():
+    """
+    Loads the restaurant data into the MySQL db.
+
+    """
     logging.info('Loading restaurants data to the database...')
 
     # Flush the db and connect to it
@@ -28,7 +31,7 @@ def load_data():
             restaurant = json.loads(line)
             restaurants_to_load.append(restaurant.values())
 
-    # Insert restaurants information into "restaurants" table
+    # Insert restaurant data into "restaurants" table
     query = "INSERT INTO restaurants (business_id, name, rating, reason, categories) " \
             "VALUES (%s, %s, %s, %s, %s)"
     cursor.executemany(query, restaurants_to_load)
@@ -40,6 +43,10 @@ def load_data():
 
 # Flush the database
 def flush():
+    """
+    Flushes the db. Removes the restaurants table if it exists.
+
+    """
     # Connect to db
     connection, cursor = connect_mysql()
 
