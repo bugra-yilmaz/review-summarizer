@@ -35,12 +35,12 @@ def get_restaurants():
 
     logging.info(f'Listing restaurants for category: {category}')
 
-    # Connect to the database and execute the corresponding query
+    # Connect to the database and get restaurants by the given category
     connection, cursor = connect_mysql()
     query = f"SELECT business_id, name, rating, reason FROM restaurants WHERE FIND_IN_SET('{category}', categories)"
     cursor.execute(query)
 
-    # Convert query result to json
+    # Create restaurant objects from the query result
     results = cursor.fetchall()
     response = {'restaurants': []}
     for result in results:
@@ -66,7 +66,7 @@ def reset_db():
     return 'Database reset.'
 
 
-# Assign URL http://localhost:5000/flush_db for flushing the DB - removes the existing data
+# Assign URL http://localhost:5000/flush_db for flushing the DB - removes the existing db
 @app.route('/flush_db', methods=['GET'])
 def flush_db():
     flush()
