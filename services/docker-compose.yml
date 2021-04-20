@@ -1,0 +1,26 @@
+version: "2.1"
+
+services:
+  mysql_server:
+    container_name: mysql_server
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: db
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  flask_server:
+    container_name: flask_server
+    build: .
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysql_server:
+        condition: service_healthy
