@@ -50,7 +50,6 @@ def get_restaurants():
                       'reason': result[3].split(',')}
         response['restaurants'].append(restaurant)
 
-    logging.info(f'{response}')
     logging.info(f'Listed {cursor.rowcount} restaurants.')
 
     # Close the DB connection
