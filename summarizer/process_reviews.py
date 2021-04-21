@@ -62,7 +62,7 @@ def extract_reason(summaries: list[Summary], n_features: int = 3):
 
 if __name__ == '__main__':
     # Parse command line arguments
-    argument_parser = argparse.ArgumentParser()
+    argument_parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     argument_parser.add_argument('-ybd', '--yelp-bus-data', help='Filepath to Yelp business dataset',
                                  dest='ybd', default='data/sample_business.json', metavar='')
     argument_parser.add_argument('-yrd', '--yelp-rew-data', help='Filepath to Yelp review dataset',
