@@ -31,7 +31,7 @@ def get_restaurants():
 
     # Check if the category value is empty
     if not category:
-        return "Please give a category name - http://localhost:5000/restaurants?category=my_category"
+        return "Please give a category name - http://localhost:5000/restaurants?category=my_category", 400
 
     logging.info(f'Listing restaurants for category: {category}')
 
