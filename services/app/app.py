@@ -7,7 +7,6 @@ from flask import Flask
 from flask import request
 
 from common import *
-from data_loader import flush
 from data_loader import load_data
 
 # Initialize Flask app
@@ -64,14 +63,6 @@ def reset_db():
     load_data()
 
     return 'Database reset.'
-
-
-# Assign URL http://localhost:5000/flush_db for flushing the DB - removes the existing db
-@app.route('/flush_db', methods=['GET'])
-def flush_db():
-    flush()
-
-    return 'Database flushed.'
 
 
 # Run the API on localhost:5000
